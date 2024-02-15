@@ -37,12 +37,41 @@ const getListarFilmes = async () => {
 
 }
 
-const getBuscarFilme = async () => {
+const getBuscarFilmeId = async (id) => {
+    let dadosFilmeJSON = {}
 
+    let dadosFilme = await filmesDAO.selectByIdFilme(id)
+
+    if(dadosFilme){
+        dadosFilmeJSON.filme = dadosFilme
+        dadosFilmeJSON.quantidade = dadosFilme.length
+        dadosFilmeJSON.status_code = 200
+
+        return dadosFilmeJSON
+    } else{
+        return false
+    }
+}
+
+const getBuscarFilme = async (titulo,data) =>{
+    let filmeJSON = {}
+
+    let dadosFilme = await filmesDAO.selectByNomeFilme(titulo,data)
+
+    if(dadosFilme){
+        filmeJSON.filme = dadosFilme
+        filmeJSON.quantidade = dadosFilme.length
+        filmeJSON.status_code = 200
+
+        return filmeJSON
+    } else {
+        return false
+    }
 }
 
 module.exports = {
     getBuscarFilme,
+    getBuscarFilmeId,
     getListarFilmes,
     setAtualizarFilme,
     setExcluirFilme,
