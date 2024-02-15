@@ -41,7 +41,25 @@ const selectAllFilmes = async () => {
 }
 
 const selectByIdFilme = async (id) => {
+    let sql = `select * from tbl_filme where id =${id}`
 
+    let rsFilmes = await prisma.$queryRawUnsafe(sql)
+
+    if (rsFilmes.length > 0)
+        return rsFilmes
+    else 
+        return false  
+}
+
+const selectByNomeFilme = async (titulo, ano) => {
+    let sql = `select * from tbl_filme where nome like "${titulo}%" or data_lancamento like "${ano}%"`
+
+    let rsFilmes = await prisma.$queryRawUnsafe(sql)
+
+    if (rsFilmes.length > 0)
+        return rsFilmes
+    else 
+        return false    
 }
 
 module.exports = {
@@ -49,5 +67,6 @@ module.exports = {
     updateFilme,
     deleteFilme,
     selectAllFilmes,
-    selectByIdFilme
+    selectByIdFilme,
+    selectByNomeFilme
 }
