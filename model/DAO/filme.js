@@ -13,7 +13,6 @@ const prisma = new PrismaClient()
 
 //Função para inserir filme no Banco de Dados
 const insertFilme = async () => {
-
 }
 
 //Função para atualizar um filme no Banco de Dados
@@ -28,38 +27,47 @@ const deleteFilme = async () => {
 
 //Função para listar todos os filmes no Banco de Dados
 const selectAllFilmes = async () => {
-    let sql = 'select * from tbl_filme'
 
-    //$queryRawUnsafe(sql) - possibilita encaminhar uma varável 
-    //$queryRaw('select * from tbl_filme') - faz o script dentro dele
-    let rsFilmes = await prisma.$queryRawUnsafe(sql)
+    try {
+        let sql = 'select * from tbl_filme'
+    
+        //$queryRawUnsafe(sql) - possibilita encaminhar uma varável 
+        //$queryRaw('select * from tbl_filme') - faz o script dentro dele
+        let rsFilmes = await prisma.$queryRawUnsafe(sql)
 
-    if (rsFilmes.length > 0)
         return rsFilmes
-    else 
+        
+    } catch (error) {
         return false
+    }
 }
 
 const selectByIdFilme = async (id) => {
-    let sql = `select * from tbl_filme where id =${id}`
 
-    let rsFilmes = await prisma.$queryRawUnsafe(sql)
+    try {
+        let sql = `select * from tbl_filme where id =${id}`
+    
+        let rsFilme = await prisma.$queryRawUnsafe(sql)
+    
+        return rsFilme 
+    } catch (error) {
+        return false
+    }
 
-    if (rsFilmes.length > 0)
-        return rsFilmes
-    else 
-        return false  
 }
 
 const selectByNomeFilme = async (titulo, ano) => {
-    let sql = `select * from tbl_filme where nome like "${titulo}%" or data_lancamento like "${ano}%"`
 
-    let rsFilmes = await prisma.$queryRawUnsafe(sql)
+    try {
+        let sql = `select * from tbl_filme where nome like "${titulo}%" or data_lancamento like "${ano}%"`
+    
+        let rsFilmes = await prisma.$queryRawUnsafe(sql)
 
-    if (rsFilmes.length > 0)
         return rsFilmes
-    else 
-        return false    
+        
+    } catch (error) {
+        return false
+    }    
 }
 
 module.exports = {
