@@ -29,45 +29,35 @@ app.use((request, response, next) =>{
 
 //versão 1.0 que retorna os dados de um arquivo de filmes
 //Período de utilização 01/2024 até 02/2024
-app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next){
+// app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next){
 
-    let controleFilmes = require('./controller/getAllMovies')
-    let listaFilmes = controleFilmes.getAllMovies()
+//     let controleFilmes = require('./controller/getAllMovies')
+//     let listaFilmes = controleFilmes.getAllMovies()
 
-    if(listaFilmes){
-        response.json(listaFilmes)
-        response.status(200)
-    } else {
-        response.json({erro:'Não foi possível concluir a requisição'})
-        response.status(404)
-    }
-})
+//     if(listaFilmes){
+//         response.json(listaFilmes)
+//         response.status(200)
+//     } else {
+//         response.json({erro:'Não foi possível concluir a requisição'})
+//         response.status(404)
+//     }
+// })
 
 //versão 2.0 que retorna os dados de filmes do Banco de Dados
 app.get('/v2/acmeFilmes/filmes', cors(), async function(request, response){
     let dadosfilmes =await controllerFilmes.getListarFilmes()
 
-    if(dadosfilmes){
-        response.json(dadosfilmes)
-        response.status(200)
-    } else {
-        response.json({message:'Nenhum registro encontrado.'})
-        response.status(404)
-    }
+    response.status(dadosfilmes.status_code)
+    response.json(dadosfilmes)
 })
 
-app.get('/v1/acmeFilmes/filmes/filtroId', cors(), async function(request, response, next){
-    let id = request.query.id
+app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response, next){
+    let id = request.params.id
 
     let dadosFilme = await controllerFilmes.getBuscarFilmeId(id)
 
-    if(dadosFilme){
-        response.json(dadosFilme)
-        response.status(200)
-    } else {
-        response.json({error:'Item não encontrado'})
-        response.status(404)
-    }
+    response.status(dadosFilme.status_code)
+    response.json(dadosFilme)
 })
 
 app.get('/v1/acmeFilmes/filmes/filtro', cors(), async function(request, response){
@@ -76,13 +66,8 @@ app.get('/v1/acmeFilmes/filmes/filtro', cors(), async function(request, response
 
     let dadosFilmes = await controllerFilmes.getBuscarFilme(titulo,data)
 
-    if(dadosFilmes){
-        response.json(dadosFilmes)
-        response.status(200)
-    } else{
-        response.json({error:'Item não encontrado'})
-        response.status(404)
-    }
+    response.status(dadosFilmes.status_code)
+    response.json(dadosFilmes)
 })
 
 app.listen('8080', function(){
