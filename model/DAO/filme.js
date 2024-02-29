@@ -12,7 +12,35 @@ const prisma = new PrismaClient()
 
 
 //Função para inserir filme no Banco de Dados
-const insertFilme = async () => {
+const insertFilme = async (dadosFilme) => {
+
+    try {
+        let sql = `insert into tbl_filme (  nome,
+                                            sinopse,
+                                            duracao,
+                                            data_lancamento,
+                                            data_relancamento,
+                                            foto_capa,
+                                            valor_unitario
+        ) values (
+                                            '${dadosFilme.nome}',
+                                            '${dadosFilme.sinopse}',
+                                            '${dadosFilme.data_lancamento}',
+                                            '${dadosFilme.data_relancamento}',
+                                            '${dadosFilme.foto_capa}',
+                                            '${dadosFilme.valor_unitario}'
+        )`
+    
+        let result = await prisma.$executeRawUnsafe(sql)
+        
+        if (result) 
+            return true
+        else 
+            return false
+    } catch (error) {
+        return false
+    }
+
 }
 
 //Função para atualizar um filme no Banco de Dados

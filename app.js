@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use((request, response, next) =>{
     response.header('Access-Control-Allow-Origin', '*')
-    response.header('Access-Control-Allow-Methods', 'GET')
+    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
 
     app.use(cors())
 
@@ -26,26 +26,11 @@ app.use((request, response, next) =>{
     const controllerFilmes = require('./controller/controller_filme.js')
  /******************************************************************************************/
 
-
-//versão 1.0 que retorna os dados de um arquivo de filmes
-//Período de utilização 01/2024 até 02/2024
-// app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next){
-
-//     let controleFilmes = require('./controller/getAllMovies')
-//     let listaFilmes = controleFilmes.getAllMovies()
-
-//     if(listaFilmes){
-//         response.json(listaFilmes)
-//         response.status(200)
-//     } else {
-//         response.json({erro:'Não foi possível concluir a requisição'})
-//         response.status(404)
-//     }
-// })
+const bodyParserJSON = bodyParser.json()
 
 //versão 2.0 que retorna os dados de filmes do Banco de Dados
 app.get('/v2/acmeFilmes/filmes', cors(), async function(request, response){
-    let dadosfilmes =await controllerFilmes.getListarFilmes()
+    let dadosfilmes = await controllerFilmes.getListarFilmes()
 
     response.status(dadosfilmes.status_code)
     response.json(dadosfilmes)
@@ -68,6 +53,15 @@ app.get('/v1/acmeFilmes/filmes/filtro', cors(), async function(request, response
 
     response.status(dadosFilmes.status_code)
     response.json(dadosFilmes)
+})
+
+app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request, response){
+    let dadosBody = request.body
+
+    let resultDadosNovoFilme = await controllerFilmes.setInserirNovoFilme(dadosBody)
+
+    response.status(resultDadosNovoFilme.status_code)
+    response.json(resultDadosNovoFilme)
 })
 
 app.listen('8080', function(){
