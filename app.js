@@ -24,6 +24,7 @@ app.use((request, response, next) =>{
 
 /*********************Import dos arquivos de controller do projeto*************************/
     const controllerFilmes = require('./controller/controller_filme.js')
+const { log } = require('console')
  /******************************************************************************************/
 
 const bodyParserJSON = bodyParser.json()
