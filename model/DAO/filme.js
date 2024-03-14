@@ -52,7 +52,7 @@ const insertFilme = async (dadosFilme) => {
                                                 null,
                                                 '${dadosFilme.foto_capa}',
                                                 '${dadosFilme.valor_unitario}'
-             );`
+            );`
         }
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -80,13 +80,58 @@ const selectLastId = async () => {
 }
 
 //Função para atualizar um filme no Banco de Dados
-const updateFilme = async () => {
+const updateFilme = async (dadosFilmes, id) => {
+    let sql
+    try {
+        if (dadosFilmes.data_relancamento != '' && dadosFilmes.data_relancamento != null && dadosFilmes.data_relancamento != undefined) {
+            sql = `UPDATE tbl_filme
+            SET
+                nome = '${dadosFilmes.nome}', 
+                sinopse = '${dadosFilmes.sinopse}',
+                duracao = '${dadosFilmes.duracao}',
+                data_lancamento = '${dadosFilmes.data_lancamento}',
+                data_relancamento = '${dadosFilmes.data_relancamento}',
+                foto_capa = '${dadosFilmes.foto_capa}',
+                valor_unitario = '${dadosFilmes.valor_unitario}'
+            WHERE tbl_filme.id = ${id};`
 
+        } else {
+            sql = `UPDATE tbl_filme
+            SET
+                nome = '${dadosFilmes.nome}', 
+                sinopse = '${dadosFilmes.sinopse}',
+                duracao = '${dadosFilmes.duracao}',
+                data_lancamento = '${dadosFilmes.data_lancamento}',
+                data_relancamento = null,
+                foto_capa = '${dadosFilmes.foto_capa}',
+                valor_unitario = '${dadosFilmes.valor_unitario}'
+            WHERE tbl_filme.id = ${id};`
+        }
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
 }
 
 //Função para excluir filme no Banco de Dados
-const deleteFilme = async () => {
+const deleteFilme = async (id) => {
+    try{
+        let sql = `delete from tbl_filme where id = ${id}`
 
+        let rsdeletedMovie = await prisma.$queryRawUnsafe(sql)
+
+        return rsdeletedMovie
+    
+    } catch (error) {
+        return false
+    }
 }
 
 //Função para listar todos os filmes no Banco de Dados
