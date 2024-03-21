@@ -80,34 +80,40 @@ const setAtualizarFilme = async (dadosFilme, id, contentType) => {
             ) {
                 return message.ERROR_REQUIRED_FIELDS
             } else {
-                let validateStatus = false
+                let filmeId = await filmesDAO.selectByIdFilme(id)
+                if (filmeId.length > 0) {
+                    let validateStatus = false
 
-                if (dadosFilme.data_relancamento != null &&
-                    dadosFilme.data_relancamento != '' &&
-                    dadosFilme.data_relancamento != undefined) {
+                    if (dadosFilme.data_relancamento != null &&
+                        dadosFilme.data_relancamento != '' &&
+                        dadosFilme.data_relancamento != undefined) {
 
-                    if (dadosFilme.data_relancamento.length != 10) {
-                        return message.ERROR_REQUIRED_FIELDS
+                        if (dadosFilme.data_relancamento.length != 10) {
+                            return message.ERROR_REQUIRED_FIELDS
+                        } else {
+                            validateStatus = true
+                        }
                     } else {
                         validateStatus = true
                     }
-                } else {
-                    validateStatus = true
-                }
+                    if (validateStatus) {
+                        let filmeAtualizado = await filmesDAO.updateFilme(dadosFilme, id)
 
-                if (validateStatus) {
-                    let filmeAtualizado = await filmesDAO.updateFilme(dadosFilme, id)
+                        if (filmeAtualizado) {
+                            filmeAtualizadoJSON.filme = dadosFilme
+                            filmeAtualizadoJSON.status = message.SUCCESS_CREATED_ITEM.status
+                            filmeAtualizadoJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code
+                            filmeAtualizadoJSON.message = message.SUCCESS_CREATED_ITEM.message
 
-                    if (filmeAtualizado) {
-                        filmeAtualizadoJSON.filme = dadosFilme
-                        filmeAtualizadoJSON.status = message.SUCCESS_CREATED_ITEM.status
-                        filmeAtualizadoJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code
-                        filmeAtualizadoJSON.message = message.SUCCESS_CREATED_ITEM.message
-
-                        return message.SUCCESS_UPDATED_ITEM
-                    } else {
-                        return message.ERROR_INTERNAL_SERVER_DB //500
+                            return message.SUCCESS_UPDATED_ITEM
+                        } else {
+                            return message.ERROR_INTERNAL_SERVER_DB //500
+                        }
+                    }else {
+                        return message.ERROR_REQUIRED_FIELDS
                     }
+                } else{
+                    return message.ERROR_NOT_FOUND
                 }
             }
         } else {
@@ -122,16 +128,19 @@ const setExcluirFilme = async (id) => {
     try {
         let idFilme = id
 
-        if(idFilme == '' || idFilme == undefined || isNaN(idFilme)){
-            return message.ERROR_REQUIRED_FIELDS
+        if (idFilme == '' || idFilme == undefined || isNaN(idFilme)) {
+            return message.ERROR_INVALID_ID
         } else {
-            let filmeExcluido = await filmesDAO.deleteFilme(idFilme)
-
-            console.log(filmeExcluido);
-            if(filmeExcluido){
-                return message.SUCCESS_DELETED_ITEM
-            } else{
-                return message.ERROR_INTERNAL_SERVER_DB
+            let filmeId = await filmesDAO.selectByIdFilme(idFilme)
+            if (filmeId.length > 0) {
+                let filmeExcluido = await filmesDAO.deleteFilme(idFilme)
+                if (filmeExcluido) {
+                    return message.SUCCESS_DELETED_ITEM
+                } else {
+                    return message.ERROR_INTERNAL_SERVER_DB
+                }
+            } else {
+                return message.ERROR_NOT_FOUND
             }
         }
     } catch (error) {
@@ -190,7 +199,7 @@ const getBuscarFilmeId = async (id) => {
 const getBuscarFilme = async (titulo, data) => {
     let filmeJSON = {}
 
-    let dadosFilme = await filmesDAO.selectByNomeFilme(titulo, data)
+    let dadosFilme = await filmesDAO.selectByNomeFilme(titulo)
 
     if (dadosFilme) {
         if (dadosFilme.length > 0) {

@@ -165,10 +165,10 @@ const selectByIdFilme = async (id) => {
 
 }
 
-const selectByNomeFilme = async (titulo, ano) => {
+const selectByNomeFilme = async (titulo) => {
 
     try {
-        let sql = `select * from tbl_filme where nome like "${titulo}%" or data_lancamento like "${ano}%"`
+        let sql = `select * from tbl_filme where nome like "${titulo}%"`
 
         let rsFilmes = await prisma.$queryRawUnsafe(sql)
 
