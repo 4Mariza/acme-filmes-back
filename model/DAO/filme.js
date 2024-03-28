@@ -22,35 +22,43 @@ const insertFilme = async (dadosFilme) => {
 
             sql = `insert into tbl_filme (  nome,
                                                 sinopse,
+                                                categoria,
                                                 duracao,
                                                 data_lancamento,
                                                 data_relancamento,
                                                 foto_capa,
+                                                foto_fundo,
                                                 valor_unitario
             ) values (
                                                 '${dadosFilme.nome}',
                                                 '${dadosFilme.sinopse}',
+                                                '${dadosFilme.categoria}',
                                                 '${dadosFilme.duracao}',
                                                 '${dadosFilme.data_lancamento}',
                                                 '${dadosFilme.data_relancamento}',
                                                 '${dadosFilme.foto_capa}',
+                                                '${dadosFilme.foto_fundo}',
                                                 '${dadosFilme.valor_unitario}'
             );`
         } else {
             sql = `insert into tbl_filme (  nome,
                                                 sinopse,
+                                                categoria,
                                                 duracao,
                                                 data_lancamento,
                                                 data_relancamento,
                                                 foto_capa,
+                                                foto_fundo,
                                                 valor_unitario
             ) values (
                                                 '${dadosFilme.nome}',
                                                 '${dadosFilme.sinopse}',
+                                                '${dadosFilme.categoria}',
                                                 '${dadosFilme.duracao}',
                                                 '${dadosFilme.data_lancamento}',
                                                 null,
                                                 '${dadosFilme.foto_capa}',
+                                                '${dadosFilme.foto_fundo}',
                                                 '${dadosFilme.valor_unitario}'
             );`
         }
@@ -88,10 +96,12 @@ const updateFilme = async (dadosFilmes, id) => {
             SET
                 nome = '${dadosFilmes.nome}', 
                 sinopse = '${dadosFilmes.sinopse}',
+                categoria ='${dadosFilmes.categoria}',
                 duracao = '${dadosFilmes.duracao}',
                 data_lancamento = '${dadosFilmes.data_lancamento}',
                 data_relancamento = '${dadosFilmes.data_relancamento}',
                 foto_capa = '${dadosFilmes.foto_capa}',
+                foto_fundo = '${dadosFilmes.foto_fundo}',
                 valor_unitario = '${dadosFilmes.valor_unitario}'
             WHERE tbl_filme.id = ${id};`
 
@@ -100,10 +110,12 @@ const updateFilme = async (dadosFilmes, id) => {
             SET
                 nome = '${dadosFilmes.nome}', 
                 sinopse = '${dadosFilmes.sinopse}',
+                ctegoria = '${dadosFilmes.categoria}'
                 duracao = '${dadosFilmes.duracao}',
                 data_lancamento = '${dadosFilmes.data_lancamento}',
                 data_relancamento = null,
                 foto_capa = '${dadosFilmes.foto_capa}',
+                foto_fundo = '${dadosFilmes.foto_fundo}'
                 valor_unitario = '${dadosFilmes.valor_unitario}'
             WHERE tbl_filme.id = ${id};`
         }

@@ -67,7 +67,7 @@ app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request,
     response.json(resultDadosNovoFilme)
 })
 
-app.put('/v2/acmeFilmes/editeFilme/:id', cors(), bodyParserJSON, async function(request, response){
+app.put('/v2/acmeFilmes/filme/:id', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.header('content-type')
 
     let id = request.params.id
